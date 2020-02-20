@@ -46,6 +46,7 @@ setup(
     author="Alessandro Ogier",
     author_email="alessandro.ogier@gmail.com",
     packages=get_packages("starlette_authlib"),
+    install_requires=["starlette", "authlib",],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
