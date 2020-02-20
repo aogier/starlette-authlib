@@ -3,7 +3,6 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
-import os
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
@@ -27,11 +26,12 @@ class AuthlibMiddleware:
         max_age: int = 14 * 24 * 60 * 60,  # 14 days, in seconds
         same_site: str = "lax",
         https_only: bool = False,
+        domain: str = config("DOMAIN", cast=str, default=None),
     ) -> None:
         self.app = app
         self.jwt_header = {"alg": config("JWT_ALG", cast=str, default="HS256")}
         self.jwt_secret = secret_key
-        self.domain = config("DOMAIN", cast=str, default=None)
+        self.domain = domain
         self.session_cookie = session_cookie
         self.max_age = max_age
         self.security_flags = "httponly; samesite=" + same_site
@@ -76,7 +76,7 @@ class AuthlibMiddleware:
                         self.max_age,
                         self.security_flags,
                     )
-                    if self.domain:
+                    if self.domain:  # pragma: no cover
                         header_value += f"; domain={self.domain}"
                     headers.append("Set-Cookie", header_value)
                 elif not initial_session_was_empty:
@@ -87,6 +87,8 @@ class AuthlibMiddleware:
                         "null; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;",
                         self.security_flags,
                     )
+                    if self.domain:  # pragma: no cover
+                        header_value += f"; domain={self.domain}"
                     headers.append("Set-Cookie", header_value)
             await send(message)
 

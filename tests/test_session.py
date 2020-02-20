@@ -69,19 +69,16 @@ def test_session_expires():
     # requests removes expired cookies from response.cookies, we need to
     # fetch session id from the headers and pass it explicitly
     expired_cookie_header = response.headers["set-cookie"]
-    expired_session_value = re.search(
-        r"session=([^;]*);", expired_cookie_header)[1]
+    expired_session_value = re.search(r"session=([^;]*);", expired_cookie_header)[1]
     print(f'value if now {jwt.decode(expired_session_value, "example")}')
-    print(f'headers are {response.headers}')
-    response = client.get(
-        "/view_session", cookies={"session": expired_session_value})
+    print(f"headers are {response.headers}")
+    response = client.get("/view_session", cookies={"session": expired_session_value})
     assert response.json() == {"session": {}}
 
 
 def test_secure_session():
     app = create_app()
-    app.add_middleware(SessionMiddleware,
-                       secret_key="example", https_only=True)
+    app.add_middleware(SessionMiddleware, secret_key="example", https_only=True)
     secure_client = TestClient(app, base_url="https://testserver")
     unsecure_client = TestClient(app, base_url="http://testserver")
 
