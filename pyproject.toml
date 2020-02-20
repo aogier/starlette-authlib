@@ -18,6 +18,8 @@ requests = "^2.23.0"
 black = "^19.10b0"
 autoflake = "^1.3.1"
 pytest-cov = "^2.8.1"
+wheel = "^0.34.2"
+twine = "^3.1.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
