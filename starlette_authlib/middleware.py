@@ -4,14 +4,15 @@ Created on 20 feb 2020
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
 import os
-import typing
-
-from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+import time
+import typing
+
+from authlib.jose import jwt
+from authlib.jose.errors import BadSignatureError, ExpiredTokenError
 
 
 config = Config(".env")
@@ -28,7 +29,7 @@ class AuthlibMiddleware:
         https_only: bool = False,
     ) -> None:
         self.app = app
-        self.jwt_header = {"alg": config("JWT_ALG", cast=str)}
+        self.jwt_header = {"alg": config("JWT_ALG", cast=str, default="HS256")}
         self.jwt_secret = secret_key
         self.domain = config("DOMAIN", cast=str, default=None)
         self.session_cookie = session_cookie
@@ -48,9 +49,11 @@ class AuthlibMiddleware:
         if self.session_cookie in connection.cookies:
             data = connection.cookies[self.session_cookie].encode("utf-8")
             try:
-                scope["session"] = jwt.decode(data, str(self.jwt_secret))
+                jwt_payload = jwt.decode(data, str(self.jwt_secret))
+                jwt_payload.validate_exp(time.time(), 0)
+                scope["session"] = jwt_payload["sdata"]
                 initial_session_was_empty = False
-            except BadSignatureError:
+            except (BadSignatureError, ExpiredTokenError):
                 scope["session"] = {}
         else:
             scope["session"] = {}
@@ -58,9 +61,14 @@ class AuthlibMiddleware:
         async def send_wrapper(message: Message) -> None:
             if message["type"] == "http.response.start":
                 if scope["session"]:
-                    data = jwt.encode(self.jwt_header,
-                                      scope["session"],
-                                      str(self.jwt_secret))
+                    session_data = {
+                        "exp": int(time.time()) + self.max_age,
+                        "sdata": scope["session"],
+                    }
+                    data = jwt.encode(
+                        self.jwt_header, session_data, str(self.jwt_secret)
+                    )
+
                     headers = MutableHeaders(scope=message)
                     header_value = "%s=%s; path=/; Max-Age=%d; %s" % (
                         self.session_cookie,
