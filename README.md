@@ -1,5 +1,15 @@
 # Starlette Authlib Middleware
 
+<a href="https://travis-ci.org/aogier/starlette-authlib">
+    <img src="https://travis-ci.org/aogier/starlette-authlib.svg?branch=master" alt="Build Status">
+</a>
+<a href="https://codecov.io/gh/aogier/starlette-authlib">
+    <img src="https://codecov.io/gh/aogier/starlette-authlib/branch/master/graph/badge.svg" alt="Coverage">
+</a>
+<a href="https://pypi.org/project/starlette-authlib/">
+    <img src="https://badge.fury.io/py/starlette-authlib.svg" alt="Package version">
+</a>
+
 ## Introduction
 
 A drop-in replacement for Starlette session middleware, using [authlib's jwt](https://docs.authlib.org/en/latest/jose/jwt.html)
