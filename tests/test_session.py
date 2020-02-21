@@ -1,11 +1,19 @@
+import os
 import re
 
+import pytest
 from authlib.jose import jwt
 from starlette.applications import Starlette
+from starlette.datastructures import Secret
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
+from starlette_authlib.middleware import (
+    AuthlibMiddleware as SessionMiddleware,
+    SecretKey,
+)
+
+KEYS_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_app", "keys")
 
 
 def view_session(request):
@@ -31,77 +39,150 @@ def create_app():
     return app
 
 
-def test_session():
+def test_failing_session_setup():
+
+    jwt_alg = "ES256"
+    secret_key = SecretKey(
+        Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
+        Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+    )
+
     app = create_app()
-    app.add_middleware(SessionMiddleware, secret_key="example")
-    client = TestClient(app)
+    with pytest.raises(Exception):
+        app.add_middleware(SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key)
 
-    response = client.get("/view_session")
-    assert response.json() == {"session": {}}
 
-    response = client.post("/update_session", json={"some": "data"})
-    assert response.json() == {"session": {"some": "data"}}
+def test_session():
 
-    # check cookie max-age
-    set_cookie = response.headers["set-cookie"]
-    max_age_matches = re.search(r"; Max-Age=([0-9]+);", set_cookie)
-    assert max_age_matches is not None
-    assert int(max_age_matches[1]) == 14 * 24 * 3600
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "ES256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
+            ),
+        ),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
 
-    response = client.get("/view_session")
-    assert response.json() == {"session": {"some": "data"}}
+        app = create_app()
+        app.add_middleware(SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key)
+        client = TestClient(app)
 
-    response = client.post("/clear_session")
-    assert response.json() == {"session": {}}
+        response = client.get("/view_session")
+        assert response.json() == {"session": {}}
 
-    response = client.get("/view_session")
-    assert response.json() == {"session": {}}
+        response = client.post("/update_session", json={"some": "data"})
+        assert response.json() == {"session": {"some": "data"}}
+
+        # check cookie max-age
+        set_cookie = response.headers["set-cookie"]
+        max_age_matches = re.search(r"; Max-Age=([0-9]+);", set_cookie)
+        assert max_age_matches is not None
+        assert int(max_age_matches[1]) == 14 * 24 * 3600
+
+        response = client.get("/view_session")
+        assert response.json() == {"session": {"some": "data"}}
+
+        response = client.post("/clear_session")
+        assert response.json() == {"session": {}}
+
+        response = client.get("/view_session")
+        assert response.json() == {"session": {}}
 
 
 def test_session_expires():
-    app = create_app()
-    app.add_middleware(SessionMiddleware, secret_key="example", max_age=-1)
-    client = TestClient(app)
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "ES256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
+            ),
+        ),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
 
-    response = client.post("/update_session", json={"some": "data"})
-    assert response.json() == {"session": {"some": "data"}}
+        app = create_app()
+        app.add_middleware(
+            SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key, max_age=-1
+        )
+        client = TestClient(app)
 
-    # requests removes expired cookies from response.cookies, we need to
-    # fetch session id from the headers and pass it explicitly
-    expired_cookie_header = response.headers["set-cookie"]
-    expired_session_value = re.search(r"session=([^;]*);", expired_cookie_header)[1]
-    print(f'value if now {jwt.decode(expired_session_value, "example")}')
-    print(f"headers are {response.headers}")
-    response = client.get("/view_session", cookies={"session": expired_session_value})
-    assert response.json() == {"session": {}}
+        response = client.post("/update_session", json={"some": "data"})
+        assert response.json() == {"session": {"some": "data"}}
+
+        # requests removes expired cookies from response.cookies, we need to
+        # fetch session id from the headers and pass it explicitly
+        expired_cookie_header = response.headers["set-cookie"]
+        expired_session_value = re.search(r"session=([^;]*);", expired_cookie_header)[1]
+
+        response = client.get(
+            "/view_session", cookies={"session": expired_session_value}
+        )
+        assert response.json() == {"session": {}}
 
 
 def test_secure_session():
-    app = create_app()
-    app.add_middleware(SessionMiddleware, secret_key="example", https_only=True)
-    secure_client = TestClient(app, base_url="https://testserver")
-    unsecure_client = TestClient(app, base_url="http://testserver")
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "ES256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
+            ),
+        ),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
 
-    response = unsecure_client.get("/view_session")
-    assert response.json() == {"session": {}}
+        app = create_app()
+        app.add_middleware(
+            SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key, https_only=True
+        )
+        secure_client = TestClient(app, base_url="https://testserver")
+        unsecure_client = TestClient(app, base_url="http://testserver")
 
-    response = unsecure_client.post("/update_session", json={"some": "data"})
-    assert response.json() == {"session": {"some": "data"}}
+        response = unsecure_client.get("/view_session")
+        assert response.json() == {"session": {}}
 
-    response = unsecure_client.get("/view_session")
-    assert response.json() == {"session": {}}
+        response = unsecure_client.post("/update_session", json={"some": "data"})
+        assert response.json() == {"session": {"some": "data"}}
 
-    response = secure_client.get("/view_session")
-    assert response.json() == {"session": {}}
+        response = unsecure_client.get("/view_session")
+        assert response.json() == {"session": {}}
 
-    response = secure_client.post("/update_session", json={"some": "data"})
-    assert response.json() == {"session": {"some": "data"}}
+        response = secure_client.get("/view_session")
+        assert response.json() == {"session": {}}
 
-    response = secure_client.get("/view_session")
-    assert response.json() == {"session": {"some": "data"}}
+        response = secure_client.post("/update_session", json={"some": "data"})
+        assert response.json() == {"session": {"some": "data"}}
 
-    response = secure_client.post("/clear_session")
-    assert response.json() == {"session": {}}
+        response = secure_client.get("/view_session")
+        assert response.json() == {"session": {"some": "data"}}
 
-    response = secure_client.get("/view_session")
-    assert response.json() == {"session": {}}
+        response = secure_client.post("/clear_session")
+        assert response.json() == {"session": {}}
+
+        response = secure_client.get("/view_session")
+        assert response.json() == {"session": {}}

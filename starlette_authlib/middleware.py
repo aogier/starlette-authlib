@@ -3,34 +3,53 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
+import time
+import typing
+from collections import namedtuple
+
+from authlib.jose import jwt
+from authlib.jose.errors import BadSignatureError, ExpiredTokenError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
-import time
-import typing
-
-from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError, ExpiredTokenError
-
 
 config = Config(".env")
+
+SecretKey = namedtuple("SecretKey", ("encode", "decode"), defaults=(None,))
 
 
 class AuthlibMiddleware:
     def __init__(
         self,
         app: ASGIApp,
-        secret_key: typing.Union[str, Secret],
+        secret_key: typing.Union[str, Secret, SecretKey],
         session_cookie: str = "session",
         max_age: int = 14 * 24 * 60 * 60,  # 14 days, in seconds
         same_site: str = "lax",
         https_only: bool = False,
         domain: str = config("DOMAIN", cast=str, default=None),
+        jwt_alg: str = config("JWT_ALG", cast=str, default="HS256"),
     ) -> None:
         self.app = app
-        self.jwt_header = {"alg": config("JWT_ALG", cast=str, default="HS256")}
-        self.jwt_secret = secret_key
+
+        self.jwt_header = {"alg": jwt_alg}
+        if not isinstance(secret_key, SecretKey):
+            self.jwt_secret = SecretKey(Secret(str(secret_key)))
+        else:
+            self.jwt_secret = secret_key
+
+        # check crypto setup so we bail out if needed
+        _jwt = jwt.encode(self.jwt_header, {"1": 2}, str(self.jwt_secret.encode))
+        assert {"1": 2} == jwt.decode(
+            _jwt,
+            str(
+                self.jwt_secret.decode
+                if self.jwt_secret.decode
+                else self.jwt_secret.encode
+            ),
+        ), "wrong crypto setup"
+
         self.domain = domain
         self.session_cookie = session_cookie
         self.max_age = max_age
@@ -49,7 +68,14 @@ class AuthlibMiddleware:
         if self.session_cookie in connection.cookies:
             data = connection.cookies[self.session_cookie].encode("utf-8")
             try:
-                jwt_payload = jwt.decode(data, str(self.jwt_secret))
+                jwt_payload = jwt.decode(
+                    data,
+                    str(
+                        self.jwt_secret.decode
+                        if self.jwt_secret.decode
+                        else self.jwt_secret.encode
+                    ),
+                )
                 jwt_payload.validate_exp(time.time(), 0)
                 scope["session"] = jwt_payload["sdata"]
                 initial_session_was_empty = False
@@ -66,7 +92,7 @@ class AuthlibMiddleware:
                         "sdata": scope["session"],
                     }
                     data = jwt.encode(
-                        self.jwt_header, session_data, str(self.jwt_secret)
+                        self.jwt_header, session_data, str(self.jwt_secret.encode)
                     )
 
                     headers = MutableHeaders(scope=message)
