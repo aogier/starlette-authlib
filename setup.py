@@ -3,16 +3,10 @@
 
 import os
 import re
+import sys
 
+import poetry_version
 from setuptools import setup
-
-
-def get_version(package):
-    """
-    Return package version as listed in `__version__` in `init.py`.
-    """
-    with open(os.path.join(package, "__init__.py")) as f:
-        return re.search("__version__ = ['\"]([^'\"]+)['\"]", f.read()).group(1)
 
 
 def get_long_description():
@@ -37,7 +31,7 @@ def get_packages(package):
 setup(
     name="starlette-authlib",
     python_requires=">=3.6",
-    version=get_version("starlette_authlib"),
+    version=poetry_version.extract(source_file=__file__),
     url="https://github.com/aogier/starlette-authlib",
     license="BSD",
     description="A drop-in replacement for Starlette session middleware, using authlib's jwt.",
