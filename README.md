@@ -48,8 +48,7 @@ Other things you can configure either via environment variables or `.env` file:
   the cookie is restricted to the subdomain of the app (this is useful when you
   write eg. SSO portals)
 * `JWT_ALG` - one of authlib JWT [supported algorithms](https://docs.authlib.org/en/latest/specs/rfc7518.html#specs-rfc7518)
-* `JWT_SECRET` - jwt secret. Be aware that for non-HMAC algorithms this
-  variable must point to a proper key filename
+* `JWT_SECRET` - jwt secret. See the `sample_app` folder for his usage w/ crypto keys.
 
 ## Contributing
 
