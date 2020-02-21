@@ -3,20 +3,21 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
-import time
-import typing
 from collections import namedtuple
-
-from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError, ExpiredTokenError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+import time
+import typing
+
+from authlib.jose import jwt
+from authlib.jose.errors import BadSignatureError, ExpiredTokenError
+
 
 config = Config(".env")
 
-SecretKey = namedtuple("SecretKey", ("encode", "decode"), defaults=(None,))
+SecretKey = namedtuple("SecretKey", ("encode", "decode"))
 
 
 class AuthlibMiddleware:
@@ -35,7 +36,7 @@ class AuthlibMiddleware:
 
         self.jwt_header = {"alg": jwt_alg}
         if not isinstance(secret_key, SecretKey):
-            self.jwt_secret = SecretKey(Secret(str(secret_key)))
+            self.jwt_secret = SecretKey(Secret(str(secret_key)), None)
         else:
             self.jwt_secret = secret_key
 
