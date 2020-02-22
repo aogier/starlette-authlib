@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import re
-import sys
 
 import poetry_version
 from setuptools import setup
