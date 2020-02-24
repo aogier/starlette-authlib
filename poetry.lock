@@ -123,6 +123,20 @@ pycparser = "*"
 
 [[package]]
 category = "dev"
+description = "Command line interface for managing CHANGELOG.md files"
+name = "changelog-cli"
+optional = false
+python-versions = "*"
+version = "0.7.1"
+
+[package.dependencies]
+click = "*"
+
+[package.extras]
+dev = ["prospector", "twine", "coverage", "invoke", "wheel", "mock"]
+
+[[package]]
+category = "dev"
 description = "Universal encoding detector for Python 2 and 3"
 name = "chardet"
 optional = false
@@ -814,7 +828,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "5343d867afc4018a88bd15e35ad606b9a8b4188bb4bed9004016aa5774b79726"
+content-hash = "6143e746d7b12e11b112f7a06bafd71d0e450157d973cfd626847d92c80eeeaa"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -886,6 +900,10 @@ cffi = [
     {file = "cffi-1.14.0-cp38-cp38-win32.whl", hash = "sha256:675686925a9fb403edba0114db74e741d8181683dcf216be697d208857e04ca8"},
     {file = "cffi-1.14.0-cp38-cp38-win_amd64.whl", hash = "sha256:00789914be39dffba161cfc5be31b55775de5ba2235fe49aa28c148236c4e06b"},
     {file = "cffi-1.14.0.tar.gz", hash = "sha256:2d384f4a127a15ba701207f7639d94106693b6cd64173d6c8988e2c25f3ac2b6"},
+]
+changelog-cli = [
+    {file = "changelog-cli-0.7.1.tar.gz", hash = "sha256:332090b98c958e06486632a7967cdd6edf3896ade4171a21f83b768eac519170"},
+    {file = "changelog_cli-0.7.1-py2.py3-none-any.whl", hash = "sha256:aaae0cfeb3681a4d7b10993f945dedf19c761b7582625f75a7abdd7272808f73"},
 ]
 chardet = [
     {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},

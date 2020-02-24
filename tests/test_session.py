@@ -2,16 +2,13 @@ import os
 import re
 
 import pytest
-from authlib.jose import jwt
 from starlette.applications import Starlette
 from starlette.datastructures import Secret
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_authlib.middleware import (
-    AuthlibMiddleware as SessionMiddleware,
-    SecretKey,
-)
+from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
+from starlette_authlib.middleware import SecretKey
 
 KEYS_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_app", "keys")
 
@@ -88,8 +85,10 @@ def test_session():
         assert max_age_matches is not None
         assert int(max_age_matches[1]) == 14 * 24 * 3600
 
-        response = client.get("/view_session")
-        assert response.json() == {"session": {"some": "data"}}
+        response = client.get("/view_session").json()
+        assert "exp" in response["session"]
+        del response["session"]["exp"]
+        assert response == {"session": {"some": "data"}}
 
         response = client.post("/clear_session")
         assert response.json() == {"session": {}}
@@ -178,8 +177,10 @@ def test_secure_session():
         response = secure_client.post("/update_session", json={"some": "data"})
         assert response.json() == {"session": {"some": "data"}}
 
-        response = secure_client.get("/view_session")
-        assert response.json() == {"session": {"some": "data"}}
+        response = secure_client.get("/view_session").json()
+        assert "exp" in response["session"]
+        del response["session"]["exp"]
+        assert response == {"session": {"some": "data"}}
 
         response = secure_client.post("/clear_session")
         assert response.json() == {"session": {}}

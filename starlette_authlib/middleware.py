@@ -3,17 +3,16 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
+import time
+import typing
 from collections import namedtuple
+
+from authlib.jose import jwt
+from authlib.jose.errors import BadSignatureError, ExpiredTokenError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
-import time
-import typing
-
-from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError, ExpiredTokenError
-
 
 config = Config(".env")
 
@@ -78,7 +77,7 @@ class AuthlibMiddleware:
                     ),
                 )
                 jwt_payload.validate_exp(time.time(), 0)
-                scope["session"] = jwt_payload["sdata"]
+                scope["session"] = jwt_payload
                 initial_session_was_empty = False
             except (BadSignatureError, ExpiredTokenError):
                 scope["session"] = {}
@@ -88,12 +87,10 @@ class AuthlibMiddleware:
         async def send_wrapper(message: Message) -> None:
             if message["type"] == "http.response.start":
                 if scope["session"]:
-                    session_data = {
-                        "exp": int(time.time()) + self.max_age,
-                        "sdata": scope["session"],
-                    }
+                    if "exp" not in scope["session"]:
+                        scope["session"]["exp"] = int(time.time()) + self.max_age
                     data = jwt.encode(
-                        self.jwt_header, session_data, str(self.jwt_secret.encode)
+                        self.jwt_header, scope["session"], str(self.jwt_secret.encode)
                     )
 
                     headers = MutableHeaders(scope=message)
