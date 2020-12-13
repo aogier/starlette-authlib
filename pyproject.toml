@@ -11,7 +11,7 @@ uvicorn = "^0.11.3"
 starlette = "^0.14.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^4.6"
+pytest = "^6.2"
 ipython = "^7.12.0"
 mypy = "^0.790"
 requests = "^2.23.0"
