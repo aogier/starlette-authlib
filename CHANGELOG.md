@@ -44,11 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Correctly implemented ES* and RS* algorithms.
 
-[Unreleased]: https://github.com/aogier/starlette-authlib/compare/v0.1.7...HEAD
-[0.1.7]: https://github.com/aogier/starlette-authlib/compare/v0.1.6...v0.1.7
-[0.1.6]: https://github.com/aogier/starlette-authlib/compare/v0.1.5...v0.1.6
-[0.1.5]: https://github.com/aogier/starlette-authlib/compare/v0.1.4...v0.1.5
-[0.1.4]: https://github.com/aogier/starlette-authlib/compare/v0.1.3...v0.1.4
-[0.1.3]: https://github.com/aogier/starlette-authlib/releases/tag/v0.1.3
+[Unreleased]: https://github.com/aogier/starlette-authlib/compare/0.1.7...HEAD
+[0.1.7]: https://github.com/aogier/starlette-authlib/compare/0.1.6...0.1.7
+[0.1.6]: https://github.com/aogier/starlette-authlib/compare/0.1.5...0.1.6
+[0.1.5]: https://github.com/aogier/starlette-authlib/compare/0.1.4...0.1.5
+[0.1.4]: https://github.com/aogier/starlette-authlib/compare/0.1.3...0.1.4
+[0.1.3]: https://github.com/aogier/starlette-authlib/releases/tag/0.1.3
 
-[//]: # (C3-2-DKAC:GGH:Raogier/starlette-authlib:Tv{t})
+[//]: # (C3-2-DKAC:GGH:Raogier/starlette-authlib:T{t})
