@@ -1,48 +1,53 @@
-# CHANGELOG
+# Changelog
 
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
----
+## [0.1.7] - 2020-12-13
 
-### New
+### Changed
 
-### Changes
+- switched to poetry for everything
+- bumped mypy for py 3.9
 
-### Fixes
+## [0.1.6] - 2020-02-24
 
-### Breaks
+### Changed
 
-## 0.1.6 - 2020-02-24
+- Expose whole jwt session cookie to starlette request.session (ie. `exp` claim is now visible).
+- Adopted [Keep a Changelog](http://keepachangelog.com/) changelog format.
 
-### Changes
+## [0.1.5] - 2020-02-21
 
-* Expose whole jwt session cookie to starlette request.session (ie. `exp` claim is
-  now visible).
-* Adopted [Keep a Changelog](http://keepachangelog.com/) changelog format.
+### Changed
 
-## 0.1.5 - 2020-02-21
+- Phased out `__version__` in module, there is no a sane way to keep it up to
+- date anyway.
 
-### Changes
+## [0.1.4] - 2020-02-21
 
-* Phased out `__version__` in module, there is no a sane way to keep it up to
-  date anyway.
+### Fixed
 
-## 0.1.4 - 2020-02-21
+- Python 3.6 namedtuple lack `default` parameter.
 
-### Fixes
+## [0.1.3] - 2020-02-21
 
-* Python 3.6 namedtuple lack `default` parameter.
+### Added
 
-## 0.1.3 - 2020-02-21
+- A changelog.
+- Added linting in CI.
 
-### New
+### Changed
 
-* A changelog.
-* Added linting in CI.
+- Correctly implemented ES* and RS* algorithms.
 
-### Changes
+[Unreleased]: https://github.com/aogier/starlette-authlib/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/aogier/starlette-authlib/compare/v0.1.6...v0.1.7
+[0.1.6]: https://github.com/aogier/starlette-authlib/compare/v0.1.5...v0.1.6
+[0.1.5]: https://github.com/aogier/starlette-authlib/compare/v0.1.4...v0.1.5
+[0.1.4]: https://github.com/aogier/starlette-authlib/compare/v0.1.3...v0.1.4
+[0.1.3]: https://github.com/aogier/starlette-authlib/releases/tag/v0.1.3
 
-* Correctly implemented ES* and RS* algorithms.
+[//]: # (C3-2-DKAC:GGH:Raogier/starlette-authlib:Tv{t})
