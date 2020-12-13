@@ -27,5 +27,5 @@ after_script:
 
 deploy:
   - provider: script
-    script: ~/.poetry/bin/poetry build && twine upload -u __token__ dist/*whl --skip-existing
+    script: ~/.poetry/bin/poetry build && ~/.poetry/bin/poetry publish
     <<: *deploy_condition
