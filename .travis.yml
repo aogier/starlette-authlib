@@ -19,10 +19,6 @@ after_script:
   - pip install codecov
   - codecov
 
-env:
-  global:
-    - secure: 'DHj2ma1AYFPuZh53Wnv9OPlMUboWOkBhvlJkN9vvW3ApthWbpQuegfJCQXrZFr2vFx10B9qdkj+NKCd1iy2PVPzYu4OFtb8xDBM8keYwbAK7gQ+EdCivFLOGU+n00FgJiKv0vFwtgKR7NAW/iTGVDSvviWDjs9kIrjIK3/ELSlmuBoOJ7qvxqnDeNqmU+LkR3ShETOY7KGkgpuE6UUEG/kfDUa0M6JUkGI/3i6iMbuyOUJn+gzADPDoBc0bnjEA6AsOF5f048vlfL57w3CyuV4qfbybHyU2phojOtTPKGt1I0jVN9lvQq4015jeoG1Qrc3oKaYXbo0NM2ah2aOpoq6wGMMBKnW4g+bEX9k+QScGLhuozMeMLAHYB4BIzwWv/E7aneI13uBogt2YT2DY64z9MwvRLJ3TUFJArh6NfbEzqCn4YabuzOMeOIQER5NwH0yrl/SFpQkQ3nfGm4qs1Cxa9Wga9RZ8DeeqUxT0LbuEXBjQsHaXDe/EFAo6cbDVL3eRsbrEK3LjsX54+412L5DF89WAcu4Y26XsZXofUuSO2ASgPKwve903JSw+9kWhz6BNLWdYdkuoc4e5Tp3uL8jPm0BebD88pmGdSvQkkfY7PxUFBqWGpszcxXIbI8yIPLMFavQVLOF80ACqMrX/RrZWq8hDDE+fyZy5Ci8QSpyw='
-
 .deploy_condition: &deploy_condition
   on:
     python: '3.7'
