@@ -27,7 +27,7 @@ env:
   on:
     python: '3.7'
     tags: true
-    repo: aogier/chachacha
+    repo: aogier/starlette-authlib
 
 deploy:
   - provider: script
