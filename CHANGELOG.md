@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - switched to poetry for everything
 - bumped mypy for py 3.9
+- security fixes
 
 ## [0.1.6] - 2020-02-24
 
