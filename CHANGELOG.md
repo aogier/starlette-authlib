@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - removed ipython from dev dependencies
 - fixed 3.6 quirks in CI
+- capture decode errors too, thx @rcyrus
 
 ## [0.1.7] - 2020-12-13
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starlette-authlib"
-version = "0.1.7"
+version = "0.1.8"
 description = "A drop-in replacement for Starlette session middleware, using authlib's jwt"
 authors = ["Alessandro Ogier <alessandro.ogier@gmail.com>"]
 
