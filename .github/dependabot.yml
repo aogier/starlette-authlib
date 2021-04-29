@@ -1,0 +1,29 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  target-branch: develop
+  ignore:
+  - dependency-name: urllib3
+    versions:
+    - 1.26.3
+  - dependency-name: twine
+    versions:
+    - 3.4.0
+  - dependency-name: ipython
+    versions:
+    - 7.20.0
+    - 7.21.0
+  - dependency-name: pytest
+    versions:
+    - 6.2.2
+  - dependency-name: mypy
+    versions:
+    - "0.800"
+  - dependency-name: uvicorn
+    versions:
+    - 0.13.3
