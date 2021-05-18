@@ -11,6 +11,7 @@ install:
   - sudo apt-get -y install upx-ucl curl
   - curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
   - ~/.poetry/bin/poetry install
+  - if [ X$(python -c 'import sys; print(sys.version_info.minor == 6)') == XTrue ]; then pip install dataclasses; fi
 
 script:
   - scripts/test
