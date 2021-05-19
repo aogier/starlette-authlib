@@ -5,6 +5,7 @@
 [![Package version](https://badge.fury.io/py/starlette-authlib.svg)](https://pypi.org/project/starlette-authlib)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/aogier/starlette-authlib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/aogier/starlette-authlib/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/aogier/starlette-authlib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/aogier/starlette-authlib/context:python)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/starlette-authlib)
 
 ## Introduction
 
