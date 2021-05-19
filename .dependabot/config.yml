@@ -1,8 +1,9 @@
 ---
-version: 1
-
-update_configs:
-  - package_manager: python
-    directory: /
-    update_schedule: live
-    target_branch: develop
+version: 2
+updates:
+- package-ecosystem: poetry
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  target-branch: develop
