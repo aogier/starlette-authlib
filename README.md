@@ -19,9 +19,7 @@ A drop-in replacement for Starlette session middleware, using [authlib's jwt](ht
 ## Installation
 
 ```console
-$ pip install starlette-authlib
-
-...
+pip install starlette-authlib
 ```
 
 ## Usage
