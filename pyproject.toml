@@ -13,7 +13,7 @@ starlette = "^0.14.2"
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 mypy = "^0.812"
-requests = "^2.25.1"
+requests = "^2.26.0"
 black = "^21.5b1"
 autoflake = "^1.4"
 pytest-cov = "^2.11.0"
