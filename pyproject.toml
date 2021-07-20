@@ -18,7 +18,7 @@ black = "^21.5b1"
 autoflake = "^1.4"
 pytest-cov = "^2.11.0"
 wheel = "^0.34.2"
-twine = "^3.3.0"
+twine = "^3.4.2"
 poetry-version = "^0.1.5"
 changelog-cli = "^0.7.1"
 
