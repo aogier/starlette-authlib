@@ -13,7 +13,7 @@ A drop-in replacement for Starlette session middleware, using [authlib's jwt](ht
 
 ## Requirements
 
-* Python 3.6+
+* Python 3.7+
 * Starlette 0.9+
 
 ## Installation
