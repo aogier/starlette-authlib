@@ -19,7 +19,7 @@ requests = "^2.25.1"
 black = "^22"
 autoflake = "^1.4"
 pytest-cov = "^2.11.0"
-poetry-version = "^0.1.5"
+poetry-version = "^0.2.0"
 changelog-cli = "^0.7.1"
 
 [build-system]
