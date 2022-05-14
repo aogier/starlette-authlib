@@ -1,18 +1,21 @@
 ---
 name: Release
 
+# on:
+#   workflow_run:
+#     workflows:
+#       - Run Tests
+#     types:
+#       - completed
 on:
-  workflow_run:
-    workflows:
-      - Run Tests
-    types:
-      - completed
-
+  push:
+    tags:
+      - '*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.ref_type == 'tag'
+    # if: github.ref_type == 'tag'
     steps:
       - uses: actions/checkout@v3
       - name: release
