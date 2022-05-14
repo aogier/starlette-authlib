@@ -1,11 +1,5 @@
 ARG PYTHON_VERSION=3.10
-FROM python:${PYTHON_VERSION}-slim-bullseye as poetry
-
-RUN set -x; apt-get update \
-    && apt-get install -y curl \
-    && curl \
-        -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py \
-        | python -
+FROM aogier/python-poetry:1.1.13-py${PYTHON_VERSION} as poetry
 
 WORKDIR /srv
 COPY . .
