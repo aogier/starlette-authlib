@@ -22,4 +22,5 @@ FROM poetry as release
 
 ARG PYPI_TOKEN
 
-RUN poetry publish --build -u __token__ -p $PYPI_TOKEN
+RUN . $HOME/.poetry/env \
+    && poetry publish --build -u __token__ -p $PYPI_TOKEN
