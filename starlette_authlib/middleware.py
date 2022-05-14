@@ -8,7 +8,7 @@ import typing
 from collections import namedtuple
 
 from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError, ExpiredTokenError, DecodeError
+from authlib.jose.errors import BadSignatureError, DecodeError, ExpiredTokenError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
@@ -28,7 +28,7 @@ class AuthlibMiddleware:
         max_age: int = 14 * 24 * 60 * 60,  # 14 days, in seconds
         same_site: str = "lax",
         https_only: bool = False,
-        domain: str = config("DOMAIN", cast=str, default=None),
+        domain: typing.Optional[str] = config("DOMAIN", cast=str, default=None),
         jwt_alg: str = config("JWT_ALG", cast=str, default="HS256"),
     ) -> None:
         self.app = app

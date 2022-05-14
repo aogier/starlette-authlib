@@ -3,22 +3,22 @@ name = "starlette-authlib"
 version = "0.1.8"
 description = "A drop-in replacement for Starlette session middleware, using authlib's jwt"
 authors = ["Alessandro Ogier <alessandro.ogier@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/aogier/starlette-authlib"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-authlib = ">=0.14.1,<0.16.0"
-uvicorn = "^0.13.4"
-starlette = "^0.14.2"
+authlib = "<1"
+uvicorn = "<0.18"
+starlette = "<0.21"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
-mypy = "^0.812"
+mypy = "^0.950"
 requests = "^2.25.1"
-black = "^21.5b1"
+black = "^22"
 autoflake = "^1.4"
 pytest-cov = "^2.11.0"
-wheel = "^0.34.2"
-twine = "^3.3.0"
 poetry-version = "^0.1.5"
 changelog-cli = "^0.7.1"
 

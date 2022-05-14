@@ -10,7 +10,25 @@ export PYTHON_VERSION=`python -c "$VERSION_SCRIPT"`
 
 set -x
 
-PYTHONPATH=. ${PREFIX}pytest --ignore venv -W ignore::DeprecationWarning --cov=starlette_authlib --cov=tests --cov-fail-under=100 --cov-report=term-missing ${@}
-${PREFIX}mypy starlette_authlib --ignore-missing-imports --disallow-untyped-defs
-${PREFIX}autoflake --recursive starlette_authlib tests
-${PREFIX}black starlette_authlib tests --check
+PYTHONPATH=. ${PREFIX}pytest \
+    --ignore venv \
+    -W ignore::DeprecationWarning \
+    --cov=starlette_authlib \
+    --cov=tests \
+    --cov-fail-under=100 \
+    --cov-report=term-missing ${@}
+
+${PREFIX}mypy \
+    starlette_authlib \
+    --ignore-missing-imports \
+    --disallow-untyped-defs
+
+${PREFIX}autoflake \
+    --recursive \
+    starlette_authlib \
+    tests
+
+${PREFIX}black \
+    starlette_authlib \
+    tests \
+    --check

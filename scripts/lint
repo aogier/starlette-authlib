@@ -7,8 +7,28 @@ fi
 
 set -x
 
-${PREFIX}mypy starlette_authlib --ignore-missing-imports --disallow-untyped-defs
-${PREFIX}autoflake --in-place --recursive starlette_authlib tests setup.py
-${PREFIX}black starlette_authlib tests setup.py
-${PREFIX}isort --multi-line=3 --trailing-comma --force-grid-wrap=0 --combine-as --line-width 88 --recursive --apply starlette_authlib tests setup.py
-${PREFIX}mypy starlette_authlib --ignore-missing-imports --disallow-untyped-defs
+${PREFIX}mypy \
+    starlette_authlib \
+    --ignore-missing-imports \
+    --disallow-untyped-defs
+
+${PREFIX}autoflake \
+    --in-place \
+    --recursive \
+    starlette_authlib tests
+
+${PREFIX}black \
+    starlette_authlib tests
+
+${PREFIX}isort \
+    --multi-line=3 \
+    --trailing-comma \
+    --force-grid-wrap=0 \
+    --combine-as \
+    --line-width 88 \
+    starlette_authlib tests
+
+${PREFIX}mypy \
+    starlette_authlib \
+    --ignore-missing-imports \
+    --disallow-untyped-defs

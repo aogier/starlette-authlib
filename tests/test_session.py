@@ -7,8 +7,10 @@ from starlette.datastructures import Secret
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
 
-from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
-from starlette_authlib.middleware import SecretKey
+from starlette_authlib.middleware import (
+    AuthlibMiddleware as SessionMiddleware,
+    SecretKey,
+)
 
 KEYS_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_app", "keys")
 
