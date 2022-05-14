@@ -22,4 +22,4 @@ FROM poetry as release
 
 ARG PYPI_TOKEN
 
-RUN set -x; echo poetry publish --build -u __token__ -p XX
+RUN poetry publish --build -u __token__ -p $PYPI_TOKEN
