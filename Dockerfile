@@ -18,7 +18,7 @@ FROM poetry as test
 
 RUN scripts/test
 
-FROM poetry as publish
+FROM poetry as release
 
 ARG PYPI_TOKEN
 
