@@ -21,6 +21,10 @@ RUN scripts/test
 FROM poetry as release
 
 ARG PYPI_TOKEN
+ARG CODECOV_TOKEN
+
+COPY --from=test coverage.xml .
 
 RUN . $HOME/.poetry/env \
-    && poetry publish --build -u __token__ -p $PYPI_TOKEN
+    && poetry publish --build -u __token__ -p $PYPI_TOKEN \
+    && codecov -t $CODECOV_TOKEN

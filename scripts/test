@@ -13,6 +13,7 @@ set -x
 PYTHONPATH=. ${PREFIX}pytest \
     --ignore venv \
     -W ignore::DeprecationWarning \
+    --cov-report=xml \
     --cov=starlette_authlib \
     --cov=tests \
     --cov-fail-under=100 \

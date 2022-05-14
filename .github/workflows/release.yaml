@@ -25,4 +25,5 @@ jobs:
 
           docker build . \
             --target release \
-            --build-arg PYPI_TOKEN=${{ secrets.PYPI_TOKEN }}
+            --build-arg PYPI_TOKEN=${{ secrets.PYPI_TOKEN }} \
+            --build-arg CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }}

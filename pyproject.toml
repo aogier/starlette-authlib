@@ -11,15 +11,15 @@ python = "^3.7"
 authlib = "<1"
 uvicorn = "<0.18"
 starlette = "<0.21"
+codecov = {version = "^2.1.12", extras = ["ci"]}
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
+pytest = "^7"
 mypy = "^0.950"
 requests = "^2.25.1"
 black = "^22"
 autoflake = "^1.4"
-pytest-cov = "^2.11.0"
-poetry-version = "^0.1.5"
+pytest-cov = "^3"
 changelog-cli = "^0.7.1"
 
 [build-system]
