@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.10
-FROM aogier/python-poetry:1.1.13-py${PYTHON_VERSION} as poetry
+FROM aogier/python-poetry:py${PYTHON_VERSION} as poetry
 
 WORKDIR /srv
 COPY . .
