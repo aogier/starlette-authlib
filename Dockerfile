@@ -17,6 +17,7 @@ FROM poetry as release
 
 ARG PYPI_TOKEN
 ARG CODECOV_TOKEN
+ARG GIT_SHA
 
 COPY --from=test /srv/coverage.xml .
 
@@ -25,4 +26,6 @@ RUN set -x \
     && poetry publish --build \
         --username __token__ \
         --password $PYPI_TOKEN \
-    && codecov -t $CODECOV_TOKEN
+    && codecov \
+        --token $CODECOV_TOKEN \
+        --commit $GIT_SHA
