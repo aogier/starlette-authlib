@@ -6,11 +6,8 @@ from starlette.applications import Starlette
 from starlette.datastructures import Secret
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
-
-from starlette_authlib.middleware import (
-    AuthlibMiddleware as SessionMiddleware,
-    SecretKey,
-)
+from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
+from starlette_authlib.middleware import SecretKey
 
 KEYS_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_app", "keys")
 
@@ -56,13 +53,6 @@ def test_session():
     for jwt_alg, secret_key in (
         ("HS256", "example"),
         (
-            "ES256",
-            SecretKey(
-                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
-                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
-            ),
-        ),
-        (
             "RS256",
             SecretKey(
                 Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
@@ -103,13 +93,6 @@ def test_session_expires():
     for jwt_alg, secret_key in (
         ("HS256", "example"),
         (
-            "ES256",
-            SecretKey(
-                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
-                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
-            ),
-        ),
-        (
             "RS256",
             SecretKey(
                 Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
@@ -141,13 +124,6 @@ def test_session_expires():
 def test_secure_session():
     for jwt_alg, secret_key in (
         ("HS256", "example"),
-        (
-            "ES256",
-            SecretKey(
-                Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
-                Secret(open(os.path.join(KEYS_DIR, "ec.pub")).read()),
-            ),
-        ),
         (
             "RS256",
             SecretKey(
