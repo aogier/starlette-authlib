@@ -423,7 +423,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "starlette"
-version = "0.20.3"
+version = "0.20.4"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
@@ -794,8 +794,8 @@ sniffio = [
     {file = "sniffio-1.2.0.tar.gz", hash = "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"},
 ]
 starlette = [
-    {file = "starlette-0.20.3-py3-none-any.whl", hash = "sha256:4d39be143dffde65782865ce40f86e5a8986400c5be0217b3cda3e732bfd7233"},
-    {file = "starlette-0.20.3.tar.gz", hash = "sha256:38ef09c1c9a8ea7b7927d2c42d515efbbdbb6ea60dbe88b29abb320824fe16c1"},
+    {file = "starlette-0.20.4-py3-none-any.whl", hash = "sha256:c0414d5a56297d37f3db96a84034d61ce29889b9eaccf65eb98a0b39441fcaa3"},
+    {file = "starlette-0.20.4.tar.gz", hash = "sha256:42fcf3122f998fefce3e2c5ad7e5edbf0f02cf685d646a83a08d404726af5084"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
