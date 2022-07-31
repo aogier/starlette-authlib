@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.12] - 2022-07-31
+
+### Changed
+
+- dev dependencies bump
+- uvicorn dependency bumped to current minor
+
 ## [0.1.11] - 2022-06-13
 
 ### Changed
@@ -96,7 +103,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Correctly implemented ES* and RS* algorithms.
 
-[Unreleased]: https://github.com/aogier/starlette-authlib/compare/0.1.11...HEAD
+[Unreleased]: https://github.com/aogier/starlette-authlib/compare/0.1.12...HEAD
+[0.1.12]: https://github.com/aogier/starlette-authlib/compare/0.1.11...0.1.12
 [0.1.11]: https://github.com/aogier/starlette-authlib/compare/0.1.10...0.1.11
 [0.1.10]: https://github.com/aogier/starlette-authlib/compare/0.1.9...0.1.10
 [0.1.9]: https://github.com/aogier/starlette-authlib/compare/0.1.8...0.1.9
