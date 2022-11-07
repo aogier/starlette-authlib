@@ -14,7 +14,7 @@ starlette = "<0.22"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7"
-mypy = "^0.982"
+mypy = "^0.990"
 requests = "^2.28.1"
 black = "^22"
 autoflake = "^1.7"
