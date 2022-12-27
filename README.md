@@ -3,8 +3,6 @@
 [![Build Status](https://travis-ci.org/aogier/starlette-authlib.svg?branch=master)](https://travis-ci.org/aogier/starlette-authlib)
 [![codecov](https://codecov.io/gh/aogier/starlette-authlib/branch/master/graph/badge.svg)](https://codecov.io/gh/aogier/starlette-authlib)
 [![Package version](https://badge.fury.io/py/starlette-authlib.svg)](https://pypi.org/project/starlette-authlib)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/aogier/starlette-authlib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/aogier/starlette-authlib/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/aogier/starlette-authlib.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/aogier/starlette-authlib/context:python)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/starlette-authlib)
 
 ## Introduction
