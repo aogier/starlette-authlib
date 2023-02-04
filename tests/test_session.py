@@ -6,8 +6,11 @@ from starlette.applications import Starlette
 from starlette.datastructures import Secret
 from starlette.responses import JSONResponse
 from starlette.testclient import TestClient
-from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
-from starlette_authlib.middleware import SecretKey
+
+from starlette_authlib.middleware import (
+    AuthlibMiddleware as SessionMiddleware,
+    SecretKey,
+)
 
 KEYS_DIR = os.path.join(os.path.dirname(__file__), "..", "sample_app", "keys")
 
@@ -36,7 +39,6 @@ def create_app():
 
 
 def test_failing_session_setup():
-
     jwt_alg = "ES256"
     secret_key = SecretKey(
         Secret(open(os.path.join(KEYS_DIR, "ec.key")).read()),
@@ -49,7 +51,6 @@ def test_failing_session_setup():
 
 
 def test_session():
-
     for jwt_alg, secret_key in (
         ("HS256", "example"),
         (
@@ -60,7 +61,6 @@ def test_session():
             ),
         ),
     ):
-
         app = create_app()
         app.add_middleware(SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key)
         client = TestClient(app)
@@ -100,7 +100,6 @@ def test_session_expires():
             ),
         ),
     ):
-
         app = create_app()
         app.add_middleware(
             SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key, max_age=-1
@@ -132,7 +131,6 @@ def test_secure_session():
             ),
         ),
     ):
-
         app = create_app()
         app.add_middleware(
             SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key, https_only=True
