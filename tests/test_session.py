@@ -48,6 +48,7 @@ def test_failing_session_setup():
     app = create_app()
     with pytest.raises(Exception):
         app.add_middleware(SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key)
+        app.build_middleware_stack()
 
 
 def test_session():
