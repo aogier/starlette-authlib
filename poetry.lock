@@ -765,14 +765,14 @@ files = [
 
 [[package]]
 name = "starlette"
-version = "0.23.1"
+version = "0.24.0"
 description = "The little ASGI library that shines."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "starlette-0.23.1-py3-none-any.whl", hash = "sha256:ec69736c90be8dbfc6ec6800ba6feb79c8c44f9b1706c0b2bb27f936bcf362cc"},
-    {file = "starlette-0.23.1.tar.gz", hash = "sha256:8510e5b3d670326326c5c1d4cb657cc66832193fe5d5b7015a51c7b1e1b1bf42"},
+    {file = "starlette-0.24.0-py3-none-any.whl", hash = "sha256:75e2b24d71ff4f7cb9a3338f83d234c2d4135bf80f52aeb105c02a01d72a5df1"},
+    {file = "starlette-0.24.0.tar.gz", hash = "sha256:7925947f177a19e906c6ace10f07c64c4f9fdf7d509caaac6589f7cc0cfd95f3"},
 ]
 
 [package.dependencies]
@@ -876,4 +876,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "fa9c93e9bea2b825459e02142d879243ad6d83c733bc69819801dada22e4fd4a"
+content-hash = "5fdfa3f7413edeb20f845bde2856dadaf1eef489589fd0bc6e776d29f3fcbae9"
