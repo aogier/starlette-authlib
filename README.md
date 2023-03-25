@@ -1,6 +1,5 @@
 # Starlette Authlib Middleware
 
-[![Build Status](https://travis-ci.org/aogier/starlette-authlib.svg?branch=master)](https://travis-ci.org/aogier/starlette-authlib)
 [![codecov](https://codecov.io/gh/aogier/starlette-authlib/branch/master/graph/badge.svg)](https://codecov.io/gh/aogier/starlette-authlib)
 [![Package version](https://badge.fury.io/py/starlette-authlib.svg)](https://pypi.org/project/starlette-authlib)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/starlette-authlib)
