@@ -6,7 +6,7 @@
 
 ## Introduction
 
-A drop-inreplacement for Starlette session middleware, using [authlib's jwt](https://docs.authlib.org/en/latest/jose/jwt.html).
+A drop-in replacement for Starlette session middleware, using [authlib's jwt](https://docs.authlib.org/en/latest/jose/jwt.html).
 
 ## Rationale
 
