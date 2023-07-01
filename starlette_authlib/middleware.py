@@ -3,6 +3,7 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
+import sys
 import time
 import typing
 from collections import namedtuple
@@ -13,6 +14,14 @@ from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+if sys.version_info.minor == 7:  # pragma: no cover
+    import warnings
+
+    warnings.warn(
+        "python 3.7 is end of life: support for this version will be removed on 2024-06-27",
+        DeprecationWarning,
+    )
 
 config = Config(".env")
 

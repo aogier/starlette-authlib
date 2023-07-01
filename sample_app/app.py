@@ -68,13 +68,21 @@ You can then check it via curl using a cookie-jar
 """
 
 import os
+
 from starlette.applications import Starlette
 from starlette.config import Config
 from starlette.datastructures import Secret
-from starlette.responses import Response, RedirectResponse
+from starlette.responses import RedirectResponse, Response
 from starlette.routing import Route
 
-from starlette_authlib.middleware import AuthlibMiddleware, SecretKey
+if os.environ.get("VANILLA"):
+    print("using vanilla")
+    from starlette.middleware.sessions import SessionMiddleware
+else:
+    from starlette_authlib.middleware import (
+        AuthlibMiddleware as SessionMiddleware,
+        SecretKey,
+    )
 
 
 config = Config(".env")  # pylint: disable=invalid-name
@@ -89,10 +97,21 @@ async def check(request):
     """
     Check if we are in session.
     """
+    content = """
+        <html>
+        <title>starlette authlib demo</title>
+        <body>
+            your status is: %(status)s, click here to <a href="/%(action)s">%(action)s</a>
+        </body></html>
+    """
     if not request.session.get("user"):
-        return Response(status_code=401)
+        return Response(
+            content % {"status": "logged out", "action": "login"},
+            headers={"content-type": "text/html"},
+            status_code=401,
+        )
 
-    return Response()
+    return Response(content % {"status": "logged in", "action": "logout"})
 
 
 async def login(request):
@@ -100,14 +119,26 @@ async def login(request):
     A login endpoint that creates a session.
     """
     request.session.update(
-        {"iss": "myself", "user": "username",}
+        {
+            "iss": "myself",
+            "user": "username",
+        }
     )
+    return RedirectResponse(url=request.url_for("check"))
+
+
+async def logout(request):
+    """
+    A login endpoint that creates a session.
+    """
+    request.session.clear()
     return RedirectResponse(url=request.url_for("check"))
 
 
 routes = [  # pylint: disable=invalid-name
     Route("/", endpoint=check, name="check"),
     Route("/login", endpoint=login),
+    Route("/logout", endpoint=logout),
 ]
 
 
@@ -118,9 +149,7 @@ if JWT_ALG.startswith("HS"):
         "JWT_SECRET", cast=Secret, default="secret"
     )
 else:
-
     if JWT_ALG.startswith("RS"):
-
         private_key = open(  # pylint: disable=invalid-name
             os.path.join(KEYS_DIR, "rsa.key")
         ).read()
@@ -130,7 +159,6 @@ else:
         ).read()
 
     elif JWT_ALG.startswith("ES"):
-
         private_key = open(  # pylint: disable=invalid-name
             os.path.join(KEYS_DIR, "ec.key")
         ).read()
@@ -155,4 +183,4 @@ else:
         Secret(private_key), Secret(public_key)
     )
 
-app.add_middleware(AuthlibMiddleware, secret_key=secret_key)
+app.add_middleware(SessionMiddleware, secret_key=secret_key)
