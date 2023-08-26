@@ -9,7 +9,7 @@ import typing
 from collections import namedtuple
 
 from authlib.jose import jwt
-from authlib.jose.errors import BadSignatureError, DecodeError, ExpiredTokenError
+from authlib.jose.errors import BadSignatureError, DecodeError, ExpiredTokenError, InvalidTokenError
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
 from starlette.requests import HTTPConnection
@@ -86,9 +86,10 @@ class AuthlibMiddleware:
                     ),
                 )
                 jwt_payload.validate_exp(time.time(), 0)
+                jwt_payload.validate_nbf(time.time(), 0)
                 scope["session"] = jwt_payload
                 initial_session_was_empty = False
-            except (BadSignatureError, ExpiredTokenError, DecodeError):
+            except (BadSignatureError, ExpiredTokenError, DecodeError, InvalidTokenError):
                 scope["session"] = {}
         else:
             scope["session"] = {}
