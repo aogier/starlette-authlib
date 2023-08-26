@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
 import pytest
 from starlette.applications import Starlette
@@ -121,13 +121,11 @@ def test_session_expires():
         )
         assert response.json() == {"session": {}}
 
+
 def test_session_futue_nbf():
     now = datetime.now()
     nbf = datetime.timestamp(now + timedelta(days=1))
-    claims = {
-        "nbf": nbf,
-        "some": "data"
-    }
+    claims = {"nbf": nbf, "some": "data"}
     for jwt_alg, secret_key in (
         ("HS256", "example"),
         (
@@ -158,14 +156,12 @@ def test_session_futue_nbf():
 
         response = secure_client.get("/view_session")
         assert response.json() == {"session": {}}
-    
+
+
 def test_session_past_nbf():
     now = datetime.now()
     nbf = datetime.timestamp(now - timedelta(seconds=1))
-    claims = {
-        "nbf": nbf,
-        "some": "data"
-    }
+    claims = {"nbf": nbf, "some": "data"}
     for jwt_alg, secret_key in (
         ("HS256", "example"),
         (
