@@ -121,7 +121,7 @@ def test_session_expires():
         )
         assert response.json() == {"session": {}}
 
-def test_session_nbf():
+def test_session_futue_nbf():
     now = datetime.now()
     nbf = datetime.timestamp(now + timedelta(days=1))
     claims = {
@@ -159,6 +159,45 @@ def test_session_nbf():
         response = secure_client.get("/view_session")
         assert response.json() == {"session": {}}
     
+def test_session_past_nbf():
+    now = datetime.now()
+    nbf = datetime.timestamp(now - timedelta(seconds=1))
+    claims = {
+        "nbf": nbf,
+        "some": "data"
+    }
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
+        app = create_app()
+        app.add_middleware(
+            SessionMiddleware, jwt_alg=jwt_alg, secret_key=secret_key, https_only=True
+        )
+        secure_client = TestClient(app, base_url="https://testserver")
+
+        response = secure_client.get("/view_session")
+        assert response.json() == {"session": {}}
+
+        response = secure_client.post("/update_session", json=claims.copy())
+        assert response.json() == {"session": claims.copy()}
+
+        response = secure_client.get("/view_session").json()
+        assert "exp" in response["session"]
+        del response["session"]["exp"]
+        assert response == {"session": claims.copy()}
+
+        response = secure_client.post("/clear_session")
+        assert response.json() == {"session": {}}
+
+        response = secure_client.get("/view_session")
+        assert response.json() == {"session": {}}
 
 
 def test_secure_session():
