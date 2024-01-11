@@ -1,14 +1,16 @@
 ARG PYTHON_VERSION=3.10
-FROM aogier/python-poetry:py${PYTHON_VERSION}-git as poetry
+FROM python:${PYTHON_VERSION} as base
 
 WORKDIR /srv
 COPY . .
 
+# hadolint ignore=DL3042,DL3013
 RUN set -x \
+    && pip install poetry \
     && poetry config virtualenvs.create false \
     && poetry install
 
-FROM poetry as test
+FROM base as test
 
 ARG PYTHON_VERSION=3.10
 
@@ -28,7 +30,7 @@ RUN if [ $PYTHON_VERSION != 3.7 ] \
             --cov-fail-under=100 \
             --cov-report=term-missing
 
-FROM poetry as release
+FROM base as release
 
 ARG PYPI_TOKEN
 ARG CODECOV_TOKEN
