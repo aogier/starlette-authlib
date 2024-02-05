@@ -9,7 +9,7 @@ repository = "https://github.com/aogier/starlette-authlib"
 [tool.poetry.dependencies]
 python = "^3.7"
 authlib = "<1.4"
-starlette = "<0.37"
+starlette = "<0.38"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "<2.3"
