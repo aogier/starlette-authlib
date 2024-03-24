@@ -13,7 +13,7 @@ starlette = "<0.38"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "<2.4"
-black = "^23"
+black = "^24.0.0"
 codecov = "^2.1.12"
 httpx = "^0.24.0"
 mypy = "^1.1"
