@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.39] - 2024-03-25
+
+### Security
+
+- starlette bump
+
 ## [0.1.38] - 2024-02-05
 
 ### Changed
@@ -275,7 +281,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Correctly implemented ES* and RS* algorithms.
 
-[Unreleased]: https://github.com/aogier/starlette-authlib/compare/0.1.38...HEAD
+[Unreleased]: https://github.com/aogier/starlette-authlib/compare/0.1.39...HEAD
+[0.1.39]: https://github.com/aogier/starlette-authlib/compare/0.1.38...0.1.39
 [0.1.38]: https://github.com/aogier/starlette-authlib/compare/0.1.37...0.1.38
 [0.1.37]: https://github.com/aogier/starlette-authlib/compare/0.1.36...0.1.37
 [0.1.36]: https://github.com/aogier/starlette-authlib/compare/0.1.35...0.1.36
