@@ -39,7 +39,7 @@ from starlette_authlib.middleware import AuthlibMiddleware as SessionMiddleware
 
 app = Starlette()
 
-app.add_middleware(SessionMiddleware, secret='secret')
+app.add_middleware(SessionMiddleware, secret_key='secret')
 ```
 
 Other things you can configure either via environment variables or `.env` file:
