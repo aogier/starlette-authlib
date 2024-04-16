@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starlette-authlib"
-version = "0.1.39"
+version = "0.1.40"
 description = "A drop-in replacement for Starlette session middleware, using authlib's jwt"
 authors = ["Alessandro Ogier <alessandro.ogier@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ repository = "https://github.com/aogier/starlette-authlib"
 [tool.poetry.dependencies]
 python = "^3.7"
 authlib = "<1.4"
-starlette = "<0.37"
+starlette = "<0.38"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "<2.3"
