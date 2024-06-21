@@ -42,6 +42,7 @@ class AuthlibMiddleware:
         max_age: int = 14 * 24 * 60 * 60,  # 14 days, in seconds
         same_site: str = "lax",
         https_only: bool = False,
+        path: str = "/",
         domain: typing.Optional[str] = config("DOMAIN", cast=str, default=None),
         jwt_alg: str = config("JWT_ALG", cast=str, default="HS256"),
     ) -> None:
@@ -64,6 +65,7 @@ class AuthlibMiddleware:
             ),
         ), "wrong crypto setup"
 
+        self.path = path
         self.domain = domain
         self.session_cookie = session_cookie
         self.max_age = max_age
@@ -114,9 +116,10 @@ class AuthlibMiddleware:
                     )
 
                     headers = MutableHeaders(scope=message)
-                    header_value = "%s=%s; path=/; Max-Age=%d; %s" % (
+                    header_value = "%s=%s; path=%s; Max-Age=%d; %s" % (
                         self.session_cookie,
                         data.decode("utf-8"),
+                        self.path,
                         self.max_age,
                         self.security_flags,
                     )
