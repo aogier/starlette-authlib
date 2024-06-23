@@ -3,6 +3,9 @@ Created on 20 feb 2020
 
 @author: Alessandro Ogier <alessandro.ogier@gmail.com>
 """
+
+from __future__ import annotations
+
 import sys
 import time
 import typing
@@ -39,7 +42,8 @@ class AuthlibMiddleware:
         app: ASGIApp,
         secret_key: typing.Union[str, Secret, SecretKey],
         session_cookie: str = "session",
-        max_age: int = 14 * 24 * 60 * 60,  # 14 days, in seconds
+        max_age: int | None = 14 * 24 * 60 * 60,  # 14 days, in seconds
+        path: str = "/",
         same_site: str = "lax",
         https_only: bool = False,
         domain: typing.Optional[str] = config("DOMAIN", cast=str, default=None),
@@ -64,12 +68,14 @@ class AuthlibMiddleware:
             ),
         ), "wrong crypto setup"
 
-        self.domain = domain
         self.session_cookie = session_cookie
         self.max_age = max_age
+        self.path = path
         self.security_flags = "httponly; samesite=" + same_site
         if https_only:  # Secure flag can be used with HTTPS only
             self.security_flags += "; secure"
+        if domain is not None:
+            self.security_flags += f"; domain={domain}"
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] not in ("http", "websocket"):  # pragma: no cover
@@ -108,31 +114,31 @@ class AuthlibMiddleware:
             if message["type"] == "http.response.start":
                 if scope["session"]:
                     if "exp" not in scope["session"]:
-                        scope["session"]["exp"] = int(time.time()) + self.max_age
+                        scope["session"]["exp"] = (
+                            int(time.time()) + self.max_age if self.max_age else 0
+                        )
                     data = jwt.encode(
                         self.jwt_header, scope["session"], str(self.jwt_secret.encode)
                     )
 
                     headers = MutableHeaders(scope=message)
-                    header_value = "%s=%s; path=/; Max-Age=%d; %s" % (
-                        self.session_cookie,
-                        data.decode("utf-8"),
-                        self.max_age,
-                        self.security_flags,
+                    header_value = "{session_cookie}={data}; path={path}; {max_age}{security_flags}".format(  # noqa E501
+                        session_cookie=self.session_cookie,
+                        data=data.decode("utf-8"),
+                        path=self.path,
+                        max_age=f"Max-Age={self.max_age}; " if self.max_age else "",
+                        security_flags=self.security_flags,
                     )
-                    if self.domain:  # pragma: no cover
-                        header_value += f"; domain={self.domain}"
                     headers.append("Set-Cookie", header_value)
                 elif not initial_session_was_empty:
                     # The session has been cleared.
                     headers = MutableHeaders(scope=message)
-                    header_value = "%s=%s; %s" % (
-                        self.session_cookie,
-                        "null; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;",
-                        self.security_flags,
+                    header_value = "{session_cookie}=null; path={path}; {expires}{security_flags}".format(  # noqa E501
+                        session_cookie=self.session_cookie,
+                        path=self.path,
+                        expires="expires=Thu, 01 Jan 1970 00:00:00 GMT; ",
+                        security_flags=self.security_flags,
                     )
-                    if self.domain:  # pragma: no cover
-                        header_value += f"; domain={self.domain}"
                     headers.append("Set-Cookie", header_value)
             await send(message)
 

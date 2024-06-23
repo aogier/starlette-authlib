@@ -5,7 +5,9 @@ from datetime import datetime, timedelta
 import pytest
 from starlette.applications import Starlette
 from starlette.datastructures import Secret
+from starlette.middleware import Middleware
 from starlette.responses import JSONResponse
+from starlette.routing import Mount, Route
 from starlette.testclient import TestClient
 
 from starlette_authlib.middleware import (
@@ -238,4 +240,83 @@ def test_secure_session():
         assert response.json() == {"session": {}}
 
         response = secure_client.get("/view_session")
+        assert response.json() == {"session": {}}
+
+
+def test_session_cookie_subpath():
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
+        second_app = Starlette(
+            routes=[
+                Route(
+                    "/update_session",
+                    endpoint=update_session,
+                    methods=["POST"],
+                ),
+            ],
+            middleware=[
+                Middleware(
+                    SessionMiddleware,
+                    jwt_alg=jwt_alg,
+                    secret_key=secret_key,
+                    path="/second_app",
+                )
+            ],
+        )
+
+        app = Starlette(routes=[Mount("/second_app", app=second_app)])
+        client = TestClient(app, base_url="https://testserver")
+        response = client.post("/second_app/update_session", json={"some": "data"})
+        assert response.status_code == 200
+        cookie = response.headers["set-cookie"]
+        cookie_path_match = re.search(r"; path=(\S+);", cookie)
+        assert cookie_path_match is not None
+        cookie_path = cookie_path_match.groups()[0]
+        assert cookie_path == "/second_app"
+
+
+def test_domain_cookie() -> None:
+    for jwt_alg, secret_key in (
+        ("HS256", "example"),
+        (
+            "RS256",
+            SecretKey(
+                Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+                Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+            ),
+        ),
+    ):
+        app = Starlette(
+            routes=[
+                Route("/view_session", endpoint=view_session),
+                Route("/update_session", endpoint=update_session, methods=["POST"]),
+            ],
+            middleware=[
+                Middleware(
+                    SessionMiddleware,
+                    jwt_alg=jwt_alg,
+                    secret_key=secret_key,
+                    domain=".example.com",
+                )
+            ],
+        )
+        client = TestClient(app, base_url="https://testserver")
+
+        response = client.post("/update_session", json={"some": "data"})
+        assert response.json() == {"session": {"some": "data"}}
+
+        # check cookie max-age
+        set_cookie = response.headers["set-cookie"]
+        assert "domain=.example.com" in set_cookie
+
+        client.cookies.delete("session")
+        response = client.get("/view_session")
         assert response.json() == {"session": {}}
