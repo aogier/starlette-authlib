@@ -114,8 +114,8 @@ class AuthlibMiddleware:
             if message["type"] == "http.response.start":
                 if scope["session"]:
                     if "exp" not in scope["session"]:
-                        scope["session"]["exp"] = (
-                            int(time.time()) + self.max_age if self.max_age else 0
+                        scope["session"]["exp"] = int(time.time()) + (
+                            self.max_age if self.max_age else 0
                         )
                     data = jwt.encode(
                         self.jwt_header, scope["session"], str(self.jwt_secret.encode)
