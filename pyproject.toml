@@ -12,7 +12,7 @@ authlib = "<1.4"
 starlette = "<0.38"
 
 [tool.poetry.group.dev.dependencies]
-autoflake = "<2.3"
+autoflake = "<2.4"
 black = "^23"
 codecov = "^2.1.12"
 httpx = "^0.24.0"
