@@ -18,7 +18,7 @@ components.
 
 ## Requirements
 
-* Python 3.7+
+* Python 3.10+
 * Starlette 0.9+
 
 ## Installation
