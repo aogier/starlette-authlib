@@ -38,14 +38,14 @@ joserfc = ">=1.6.1"
 
 [[package]]
 name = "autoflake"
-version = "2.2.1"
+version = "2.4.0"
 description = "Removes unused imports and unused variables"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["dev"]
 files = [
-    {file = "autoflake-2.2.1-py3-none-any.whl", hash = "sha256:265cde0a43c1f44ecfb4f30d95b0437796759d07be7706a2f70e4719234c0f79"},
-    {file = "autoflake-2.2.1.tar.gz", hash = "sha256:62b7b6449a692c3c9b0c916919bbc21648da7281e8506bcf8d3f8280e431ebc1"},
+    {file = "autoflake-2.4.0-py3-none-any.whl", hash = "sha256:85df69176550d5e070bdf4a12a1bcdad062998ed458b20a605630e74b758c7ce"},
+    {file = "autoflake-2.4.0.tar.gz", hash = "sha256:ef7c496d9bce9d2cef049f24e482d1d3090c37fbd44e5e85dfb00db3c78ee16c"},
 ]
 
 [package.dependencies]
@@ -1474,4 +1474,4 @@ typing-extensions = {version = ">=4.13.2", markers = "python_version < \"3.11\""
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "eee0c7a3c6da35b695da49ed03147fecd36a4425c6423191ef1779935c9beaa5"
+content-hash = "5a593ab153dcf0a392e9cd0b4b6c6d76d55fab1bcd7910b0504b4df1770f4d98"
