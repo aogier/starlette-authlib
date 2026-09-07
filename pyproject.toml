@@ -12,7 +12,7 @@ authlib = "<1.9"
 starlette = "<1.7"
 
 [tool.poetry.group.dev.dependencies]
-autoflake = "<2.3"
+autoflake = "<2.5"
 black = "^24.0.0"
 codecov = "^2.1.12"
 mypy = "^1.1"
