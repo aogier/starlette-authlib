@@ -6,7 +6,8 @@ COPY . .
 
 # hadolint ignore=DL3042,DL3013
 RUN set -x \
-    && pip install uv
+    && pip install uv \
+    && uv sync
 
 FROM base AS test
 

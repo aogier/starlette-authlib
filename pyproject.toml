@@ -1,6 +1,6 @@
 [project]
 name = "starlette-authlib"
-version = "0.3.22"
+version = "0.3.23"
 description = "A drop-in replacement for Starlette session middleware, using authlib's jwt"
 authors = [{ name = "Alessandro Ogier", email = "alessandro.ogier@gmail.com" }]
 requires-python = ">=3.10,<4"
