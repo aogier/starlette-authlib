@@ -1,8 +1,8 @@
 # Starlette Authlib Middleware
 
-[![codecov](https://codecov.io/gh/aogier/starlette-authlib/branch/master/graph/badge.svg)](https://codecov.io/gh/aogier/starlette-authlib)
+[![codecov](https://codecov.io/gh/aogier/starlette-authlib/branch/develop/graph/badge.svg)](https://codecov.io/gh/aogier/starlette-authlib)
 [![Package version](https://badge.fury.io/py/starlette-authlib.svg)](https://pypi.org/project/starlette-authlib)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/starlette-authlib)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/starlette-authlib?period=monthly&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=GREEN&left_text=downloads%2Fmonth)](https://pepy.tech/projects/starlette-authlib)
 
 ## Introduction
 

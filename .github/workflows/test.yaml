@@ -4,25 +4,66 @@ on:
   - push
   - pull_request
 
+
 jobs:
 
-  run_tests:
-    strategy:
+  tests:
+
+    runs-on: &runs-on ubuntu-latest
+    strategy: &strategy
       matrix:
-        version:
+        python-version:
+          # lowest supported version must be used in release workflow
           - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
-          - "3.14"
-    runs-on: ubuntu-latest
+          - &latest-py "3.14"
+        include:
+          - python-version: *latest-py
+            is_primary: true
+
     steps:
-      - uses: actions/checkout@v7
-      - name: test
-        env:
-          DOCKER_BUILDKIT: 1
+      - &checkout
+        uses: actions/checkout@v7
+
+      - &py
+        name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - &uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+
+      - name: Run Tests
         run: |
 
-          docker build . \
-            --target test \
-            --build-arg PYTHON_VERSION=${{ matrix.version }}
+          uv run pytest \
+          --ignore venv \
+          -W ignore::DeprecationWarning \
+          --cov-report=xml \
+          --cov=starlette_authlib \
+          --cov=tests \
+          --cov-fail-under=100 \
+          --cov-report=term-missing
+
+      - name: Upload Coverage Data
+        if: matrix.is_primary == true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: uv run codecov
+
+  pre-commit:
+
+    runs-on: *runs-on
+    strategy: *strategy
+
+    steps:
+      - *checkout
+      - *py
+      - *uv
+
+      - name: Run Pre-Commit
+        run: uv run pre-commit run -a --show-diff-on-failure

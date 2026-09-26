@@ -1,12 +1,6 @@
 ---
 name: Release
 
-# on:
-#   workflow_run:
-#     workflows:
-#       - Run Tests
-#     types:
-#       - completed
 on:
   push:
     tags:
@@ -15,16 +9,24 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # if: github.ref_type == 'tag'
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v7
-      - name: release
-        env:
-          DOCKER_BUILDKIT: 1
-        run: |
 
-          docker build . \
-            --target release \
-            --build-arg PYPI_TOKEN=${{ secrets.PYPI_TOKEN }} \
-            --build-arg CODECOV_TOKEN=${{ secrets.CODECOV_TOKEN }} \
-            --build-arg GIT_SHA=${{ github.sha }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          # the lowest in test workflow matrix
+          python-version: "3.10"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.2.0
+
+      - name: Build
+        run: uv build
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
