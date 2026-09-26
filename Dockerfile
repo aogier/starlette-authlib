@@ -36,6 +36,6 @@ RUN set -x \
     && uv build \
     && uv publish \
         --token $PYPI_TOKEN \
-    && codecov \
+    && uv run codecov \
         --token $CODECOV_TOKEN \
         --commit $GIT_SHA
