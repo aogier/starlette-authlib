@@ -1,41 +1,44 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
-    hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-yaml
-    -   id: check-added-large-files
-- repo: https://github.com/PyCQA/isort
-  rev: 5.11.5
+- repo: local
   hooks:
+    - id: trailing-whitespace-fixer
+      name: trailing-whitespace-fixer
+      language: system
+      entry: trailing-whitespace-fixer
+    - id: end-of-file-fixer
+      name: end-of-file-fixer
+      entry: end-of-file-fixer
+      language: system
+    - id: check-yaml
+      name: check-yaml
+      entry: check-yaml
+      language: system
+      types:
+        - yaml
+    - id: check-added-large-files
+      name: check-added-large-files
+      entry: check-added-large-files
+      language: system
     - id: isort
-      args:
-        - --multi-line=3
-        - --trailing-comma
-        - --force-grid-wrap=0
-        - --combine-as
-        - --line-width=88
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.19.1
-  hooks:
+      name: isort
+      language: system
+      entry: isort
     - id: mypy
-      exclude: ^(tests|sample_app)/
-      args:
-        - --ignore-missing-imports
-        - --disallow-untyped-defs
-        - --follow-imports
-        - skip
-- repo: https://github.com/PyCQA/autoflake
-  rev: v2.1.1
-  hooks:
-    - id: autoflake
-      args:
-        - --in-place
-        - --recursive
-- repo: https://github.com/psf/black
-  rev: 23.3.0
-  hooks:
+      name: mypy
+      language: system
+      entry: mypy
+      types:
+        - python
+      pass_filenames: false
     - id: black
+      name: black
+      language: system
+      entry: black
+      types:
+        - python
+    - id: autoflake
+      name: autoflake
+      language: system
+      entry: autoflake
