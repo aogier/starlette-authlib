@@ -16,7 +16,6 @@ dev = [
   "mypy>=2",
   "pre-commit>=4",
   "isort>=9",
-  "httpx>=0.28.1,<0.29",
   "types-authlib>=1.8.0.20260911",
   "pre-commit-hooks>=6.0.0",
   "black>=26.5.1",
@@ -24,6 +23,7 @@ dev = [
   "pytest>=9.0.3",
   "pytest-cov>=7.1.0",
   "requests>=2.34.2",
+  "httpx2>=2.13.1",
 ]
 
 [tool.uv]
