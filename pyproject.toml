@@ -1,11 +1,12 @@
 [project]
 name = "starlette-authlib"
-version = "0.3.24"
+version = "0.3.25"
 description = "A drop-in replacement for Starlette session middleware, using authlib's jwt"
 authors = [{ name = "Alessandro Ogier", email = "alessandro.ogier@gmail.com" }]
 requires-python = ">=3.10,<4"
 readme = "README.md"
 dependencies = ["authlib<1.9", "starlette<1.8"]
+license = "BSD-3-Clause"
 
 [project.urls]
 Repository = "https://github.com/aogier/starlette-authlib"
