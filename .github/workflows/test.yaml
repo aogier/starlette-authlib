@@ -18,7 +18,8 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
-          - &latest-py "3.14"
+          - "3.14"
+          - &latest-py "3.15"
         include:
           - python-version: *latest-py
             is_primary: true
