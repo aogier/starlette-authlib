@@ -5,7 +5,7 @@ description = "A drop-in replacement for Starlette session middleware, using aut
 authors = [{ name = "Alessandro Ogier", email = "alessandro.ogier@gmail.com" }]
 requires-python = ">=3.10,<4"
 readme = "README.md"
-dependencies = ["authlib<1.9", "starlette<1.8"]
+dependencies = ["authlib<1.9", "starlette<1.9"]
 license = "BSD-3-Clause"
 
 [project.urls]
