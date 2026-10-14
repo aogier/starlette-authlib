@@ -1424,7 +1424,7 @@ wheels = [
 
 [[package]]
 name = "starlette-authlib"
-version = "0.3.26"
+version = "0.3.27"
 source = { editable = "." }
 default-groups = "all"
 dependencies = [
