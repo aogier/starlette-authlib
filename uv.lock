@@ -1424,7 +1424,7 @@ wheels = [
 
 [[package]]
 name = "starlette-authlib"
-version = "0.3.29"
+version = "0.3.30"
 source = { editable = "." }
 default-groups = "all"
 dependencies = [
@@ -1452,7 +1452,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "authlib", specifier = "<1.10" },
+    { name = "authlib", specifier = ">=1.9.0,<1.10" },
     { name = "starlette", specifier = "<1.11" },
 ]
 

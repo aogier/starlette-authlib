@@ -320,3 +320,71 @@ def test_domain_cookie() -> None:
         client.cookies.delete("session")
         response = client.get("/view_session")
         assert response.json() == {"session": {}}
+
+
+def _forge_hs256(payload, secret):
+    """Mint an HS256 JWT by hand, signing with ``secret`` as the HMAC key.
+
+    This bypasses authlib's encoder (which refuses PEM material as an HMAC
+    secret) so we can reproduce the algorithm-confusion attack against an
+    asymmetric setup: an attacker signs with the public key, which is not a
+    secret.
+    """
+    import base64
+    import hashlib
+    import hmac
+    import json
+
+    def b64(raw):
+        return base64.urlsafe_b64encode(raw).rstrip(b"=")
+
+    header = b64(json.dumps({"alg": "HS256", "typ": "JWT"}).encode())
+    body = b64(json.dumps(payload).encode())
+    signing_input = header + b"." + body
+    sig = b64(hmac.new(secret.encode(), signing_input, hashlib.sha256).digest())
+    return (signing_input + b"." + sig).decode()
+
+
+def test_rejects_algorithm_confusion():
+    """An HS256 token signed with the RS256 public key must be rejected.
+
+    Without pinning the verification algorithm, authlib would honour the
+    token's own ``alg`` header and verify the HMAC against the public key,
+    forging an authenticated session (CWE-347).
+    """
+    public_key = open(os.path.join(KEYS_DIR, "rsa.pub")).read()
+    secret_key = SecretKey(
+        Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+        Secret(public_key),
+    )
+
+    app = create_app()
+    app.add_middleware(SessionMiddleware, jwt_alg="RS256", secret_key=secret_key)
+    client = TestClient(app)
+
+    forged = _forge_hs256(
+        {"user": "admin", "exp": int(datetime.timestamp(datetime.now())) + 3600},
+        public_key,
+    )
+    response = client.get("/view_session", cookies={"session": forged})
+
+    # forgery is dropped, not honoured, and not a 500
+    assert response.status_code == 200
+    assert response.json() == {"session": {}}
+
+
+def test_genuine_rs256_still_accepted():
+    """A legitimately signed RS256 token is still verified and accepted."""
+    secret_key = SecretKey(
+        Secret(open(os.path.join(KEYS_DIR, "rsa.key")).read()),
+        Secret(open(os.path.join(KEYS_DIR, "rsa.pub")).read()),
+    )
+
+    app = create_app()
+    app.add_middleware(SessionMiddleware, jwt_alg="RS256", secret_key=secret_key)
+    client = TestClient(app)
+
+    response = client.post("/update_session", json={"some": "data"})
+    assert response.json() == {"session": {"some": "data"}}
+    response = client.get("/view_session").json()
+    assert response["session"]["some"] == "data"

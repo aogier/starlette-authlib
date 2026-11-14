@@ -10,12 +10,13 @@ import time
 import typing
 from collections import namedtuple
 
-from authlib.jose import jwt
+from authlib.jose import JsonWebToken
 from authlib.jose.errors import (
     BadSignatureError,
     DecodeError,
     ExpiredTokenError,
     InvalidTokenError,
+    UnsupportedAlgorithmError,
 )
 from starlette.config import Config
 from starlette.datastructures import MutableHeaders, Secret
@@ -43,14 +44,21 @@ class AuthlibMiddleware:
         self.app = app
 
         self.jwt_header = {"alg": jwt_alg}
+        # Pin the accepted JWS algorithm to the configured one. Using the
+        # module-level ``authlib.jose.jwt`` would let the incoming token's own
+        # ``alg`` header pick the verification algorithm, which enables an
+        # algorithm-confusion forgery (e.g. an HS256 token signed with an
+        # asymmetric setup's public key). Restricting the allow-list to
+        # ``jwt_alg`` makes verification independent of the token header.
+        self.jwt = JsonWebToken([jwt_alg])
         if not isinstance(secret_key, SecretKey):
             self.jwt_secret = SecretKey(Secret(str(secret_key)), None)
         else:
             self.jwt_secret = secret_key
 
         # check crypto setup so we bail out if needed
-        _jwt = jwt.encode(self.jwt_header, {"1": 2}, str(self.jwt_secret.encode))
-        assert {"1": 2} == jwt.decode(
+        _jwt = self.jwt.encode(self.jwt_header, {"1": 2}, str(self.jwt_secret.encode))
+        assert {"1": 2} == self.jwt.decode(
             _jwt,
             str(
                 self.jwt_secret.decode
@@ -79,7 +87,7 @@ class AuthlibMiddleware:
         if self.session_cookie in connection.cookies:
             data = connection.cookies[self.session_cookie].encode("utf-8")
             try:
-                jwt_payload = jwt.decode(
+                jwt_payload = self.jwt.decode(
                     data,
                     str(
                         self.jwt_secret.decode
@@ -96,6 +104,7 @@ class AuthlibMiddleware:
                 ExpiredTokenError,
                 DecodeError,
                 InvalidTokenError,
+                UnsupportedAlgorithmError,
             ):
                 scope["session"] = {}
         else:
@@ -108,7 +117,7 @@ class AuthlibMiddleware:
                         scope["session"]["exp"] = int(time.time()) + (
                             self.max_age if self.max_age else 0
                         )
-                    data = jwt.encode(
+                    data = self.jwt.encode(
                         self.jwt_header, scope["session"], str(self.jwt_secret.encode)
                     )
 
